@@ -311,7 +311,33 @@ function setAuthTab(t){
   document.querySelectorAll(".auth-tab").forEach(function(e){e.classList.remove("act")});
   document.getElementById(t==="login"?"tabLogin":"tabRegister").classList.add("act");
 }
+
+// Fallback login/register — will be overridden by app.js if it loads OK
+var _apiBase="/universe/api";
+function _esc(s){var d=document.createElement("div");d.textContent=s||"";return d.innerHTML}
+function _post(path,body){
+  return fetch(_apiBase+path,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})
+    .then(function(r){return r.json()})
+    .catch(function(e){return{success:false,message:"Network: "+e.message}});
+}
+function login(){
+  var u=document.getElementById("lUser").value.trim(),p=document.getElementById("lPass").value;
+  if(!u||!p){document.getElementById("lMsg").innerHTML='<span style="color:#f87171">Fill in all fields</span>';return}
+  _post("/login",{username:u,password:p}).then(function(j){
+    if(j.success){localStorage.setItem("htc_universe_user",JSON.stringify(j.user));location.reload()}
+    else document.getElementById("lMsg").innerHTML='<span style="color:#f87171">'+_esc(j.message)+'</span>';
+  });
+}
+function register(){
+  var u=document.getElementById("rUser").value.trim(),p=document.getElementById("rPass").value;
+  var n=document.getElementById("rName").value.trim(),e=document.getElementById("rEmail").value.trim(),d=document.getElementById("rDept").value.trim();
+  if(!u||!p||!n||!e||!d){document.getElementById("rMsg").innerHTML='<span style="color:#f87171">Fill in all fields</span>';return}
+  _post("/register",{username:u,password:p,name:n,department:d,email:e}).then(function(j){
+    if(j.success){document.getElementById("rMsg").innerHTML='<span style="color:#34d399">OK! Logging in...</span>';setTimeout(function(){document.getElementById("lUser").value=u;document.getElementById("lPass").value=p;setAuthTab("login");login()},1000)}
+    else document.getElementById("rMsg").innerHTML='<span style="color:#f87171">'+_esc(j.message)+'</span>';
+  });
+}
 </script>
-<script src="/universe/app.js"></script>
+<script src="/universe/app.js?v=20260227" charset="utf-8"></script>
 </body>
 </html>

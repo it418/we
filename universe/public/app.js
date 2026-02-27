@@ -109,26 +109,26 @@ async function postForm(path,fd){
 
 function badge(s){
   const color={PENDING:"amber",HEAD_APPROVED:"blue",FINANCE_APPROVED:"purple",APPROVED:"green",REJECTED:"red",CANCELLED:"gray"};
-  const label={PENDING:"รอหัวหน้า",HEAD_APPROVED:"หัวหน้าอนุมัติ",FINANCE_APPROVED:"Finance อนุมัติ",APPROVED:"อนุมัติแล้ว",REJECTED:"ปฏิเสธ",CANCELLED:"ยกเลิก"};
+  const label={PENDING:"\u0e23\u0e2d\u0e2b\u0e31\u0e27\u0e2b\u0e19\u0e49\u0e32",HEAD_APPROVED:"\u0e2b\u0e31\u0e27\u0e2b\u0e19\u0e49\u0e32\u0e2d\u0e19\u0e38\u0e21\u0e31\u0e15\u0e34",FINANCE_APPROVED:"Finance \u0e2d\u0e19\u0e38\u0e21\u0e31\u0e15\u0e34",APPROVED:"\u0e2d\u0e19\u0e38\u0e21\u0e31\u0e15\u0e34\u0e41\u0e25\u0e49\u0e27",REJECTED:"\u0e1b\u0e0f\u0e34\u0e40\u0e2a\u0e18",CANCELLED:"\u0e22\u0e01\u0e40\u0e25\u0e34\u0e01"};
   return `<span class="badge ${color[s]||"gray"}">${label[s]||s}</span>`;
 }
-function typeBadge(t){return t==="WITHDRAW"?'<span class="badge blue">📤 เบิก</span>':t==="BORROW"?'<span class="badge amber">🔄 ยืม</span>':t==="PURCHASE"?'<span class="badge purple">🛒 ซื้อ</span>':`<span class="badge gray">${t}</span>`}
+function typeBadge(t){return t==="WITHDRAW"?'<span class="badge blue">\ud83d\udce4 \u0e40\u0e1a\u0e34\u0e01</span>':t==="BORROW"?'<span class="badge amber">\ud83d\udd04 \u0e22\u0e37\u0e21</span>':t==="PURCHASE"?'<span class="badge purple">\ud83d\uded2 \u0e0b\u0e37\u0e49\u0e2d</span>':`<span class="badge gray">${t}</span>`}
 
 // ===== AUTH =====
 function setAuthTab(t){document.getElementById("loginForm").style.display=t==="login"?"block":"none";document.getElementById("registerForm").style.display=t==="register"?"block":"none";document.querySelectorAll(".auth-tab").forEach(e=>e.classList.remove("act"));document.getElementById(t==="login"?"tabLogin":"tabRegister").classList.add("act")}
 
 async function login(){
   const u=document.getElementById("lUser").value.trim(),p=document.getElementById("lPass").value;
-  if(!u||!p){document.getElementById("lMsg").innerHTML='<span style="color:#f87171">กรอกให้ครบ</span>';return}
+  if(!u||!p){document.getElementById("lMsg").innerHTML='<span style="color:#f87171">\u0e01\u0e23\u0e2d\u0e01\u0e43\u0e2b\u0e49\u0e04\u0e23\u0e1a</span>';return}
   const j=await postJson("/login",{username:u,password:p});
   if(j.success){me=j.user;localStorage.setItem("htc_universe_user",JSON.stringify(me));showApp()}
   else document.getElementById("lMsg").innerHTML=`<span style="color:#f87171">${esc(j.message)}</span>`}
 
 async function register(){
   const u=document.getElementById("rUser").value.trim(),p=document.getElementById("rPass").value,n=document.getElementById("rName").value.trim(),e=document.getElementById("rEmail").value.trim(),d=document.getElementById("rDept").value.trim();
-  if(!u||!p||!n||!e||!d){document.getElementById("rMsg").innerHTML='<span style="color:#f87171">กรอกให้ครบ</span>';return}
+  if(!u||!p||!n||!e||!d){document.getElementById("rMsg").innerHTML='<span style="color:#f87171">\u0e01\u0e23\u0e2d\u0e01\u0e43\u0e2b\u0e49\u0e04\u0e23\u0e1a</span>';return}
   const j=await postJson("/register",{username:u,password:p,name:n,department:d,email:e});
-  if(j.success){document.getElementById("rMsg").innerHTML='<span style="color:#34d399">✅ สมัครสำเร็จ! เข้าสู่ระบบ...</span>';setTimeout(()=>{document.getElementById("lUser").value=u;document.getElementById("lPass").value=p;setAuthTab("login");login()},1000)}
+  if(j.success){document.getElementById("rMsg").innerHTML='<span style="color:#34d399">\u2705 \u0e2a\u0e21\u0e31\u0e04\u0e23\u0e2a\u0e33\u0e40\u0e23\u0e47\u0e08! \u0e40\u0e02\u0e49\u0e32\u0e2a\u0e39\u0e48\u0e23\u0e30\u0e1a\u0e1a...</span>';setTimeout(()=>{document.getElementById("lUser").value=u;document.getElementById("lPass").value=p;setAuthTab("login");login()},1000)}
   else document.getElementById("rMsg").innerHTML=`<span style="color:#f87171">${esc(j.message)}</span>`}
 
 function logoutUni(){localStorage.removeItem("htc_universe_user");location.reload()}
@@ -144,7 +144,7 @@ function showApp(){
   go("dash");loadItems();loadLowStock();loadMy();if(canInbox)loadInbox();loadBorrows();
 }
 
-async function changePw(){const o=document.getElementById("pwOld").value,n=document.getElementById("pwNew").value;if(!o||!n)return;const j=await postJson("/change_password",{actor:me.username,old_password:o,new_password:n});if(j.success){toast("✅ เปลี่ยนสำเร็จ","success");document.getElementById("pwCard").style.display="none"}else toast(j.message,"error")}
+async function changePw(){const o=document.getElementById("pwOld").value,n=document.getElementById("pwNew").value;if(!o||!n)return;const j=await postJson("/change_password",{actor:me.username,old_password:o,new_password:n});if(j.success){toast("\u2705 \u0e40\u0e1b\u0e25\u0e35\u0e48\u0e22\u0e19\u0e2a\u0e33\u0e40\u0e23\u0e47\u0e08","success");document.getElementById("pwCard").style.display="none"}else toast(j.message,"error")}
 
 // ===== VIEW SWITCH =====
 function go(v){document.querySelectorAll(".view").forEach(e=>e.classList.remove("act"));document.querySelectorAll(".menu .mi").forEach(e=>e.classList.remove("act"));
@@ -193,12 +193,12 @@ async function loadDashKpi(){
   const ls=await getJson("/items/low_stock")||[];
   document.getElementById("lowStockDash").innerHTML=ls.length
     ? ls.slice(0,5).map(i=>`<div class="low-stock"><i class="fa-solid fa-triangle-exclamation" style="color:#dc2626"></i><span style="flex:1">${esc(i.name)}</span><span class="badge">${Number(i.stock||0)}/${Number(i.min_stock||0)}</span></div>`).join("")
-    : '<div class="muted" style="font-size:13px;text-align:center;padding:20px">สต็อกปกติ ✅</div>';
+    : '<div class="muted" style="font-size:13px;text-align:center;padding:20px">\u0e2a\u0e15\u0e47\u0e2d\u0e01\u0e1b\u0e01\u0e15\u0e34 \u2705</div>';
 
   // Active borrows
   const brj=await getJson("/borrow_records",{actor:me.username,active:"1"})||{};
   const br=(brj.rows||[]);
-  document.getElementById("activeBorrowDash").innerHTML=br.slice(0,5).map(b=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px"><i class="fa-solid fa-arrow-right-arrow-left" style="color:#d97706"></i><span style="flex:1;font-weight:500">${esc(b.item_name||"-")}</span><span class="muted">${esc(b.borrower||"-")}</span><span class="badge amber">${(b.borrowed_at||"").slice(0,10)}</span></div>`).join("") || '<div class="muted" style="font-size:13px;text-align:center;padding:20px">ไม่มี ✅</div>';
+  document.getElementById("activeBorrowDash").innerHTML=br.slice(0,5).map(b=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px"><i class="fa-solid fa-arrow-right-arrow-left" style="color:#d97706"></i><span style="flex:1;font-weight:500">${esc(b.item_name||"-")}</span><span class="muted">${esc(b.borrower||"-")}</span><span class="badge amber">${(b.borrowed_at||"").slice(0,10)}</span></div>`).join("") || '<div class="muted" style="font-size:13px;text-align:center;padding:20px">\u0e44\u0e21\u0e48\u0e21\u0e35 \u2705</div>';
 }
 
 
@@ -222,7 +222,7 @@ async function loadItems(){
 async function loadLowStock(){const rows=await getJson("/items/low_stock")||[];/*populated in dashboard*/}
 function fillItemSelect(){
   const sel=document.getElementById("reqItem");
-  sel.innerHTML='<option value="">-- เลือกจากคลัง --</option>'+(itemsCache||[]).map(i=>`<option value="${i.id}">${esc(i.name)} (${Number(i.stock||0)})</option>`).join("");
+  sel.innerHTML='<option value="">-- \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e08\u0e32\u0e01\u0e04\u0e25\u0e31\u0e07 --</option>'+(itemsCache||[]).map(i=>`<option value="${i.id}">${esc(i.name)} (${Number(i.stock||0)})</option>`).join("");
 }
 
 function toggleAddItem(s){const box=document.getElementById("addItemBox");box.classList.toggle("hid",!s)}
@@ -231,9 +231,9 @@ async function addItem(){
   const c=document.getElementById("iCat").value.trim();
   const stock=Number(document.getElementById("iQty").value||0);
   const m=Number(document.getElementById("iMin").value||0);
-  if(!n){toast("ใส่ชื่อ","error");return}
+  if(!n){toast("\u0e43\u0e2a\u0e48\u0e0a\u0e37\u0e48\u0e2d","error");return}
   const j=await postJson("/items/add",{actor:me.username,name:n,category:c,stock,min_stock:m});
-  if(j.success){toast("✅ เพิ่มแล้ว","success");toggleAddItem(false);loadItems();fillItemSelect();loadDashKpi();}
+  if(j.success){toast("\u2705 \u0e40\u0e1e\u0e34\u0e48\u0e21\u0e41\u0e25\u0e49\u0e27","success");toggleAddItem(false);loadItems();fillItemSelect();loadDashKpi();}
   else toast(j.message,"error");
 }
 
@@ -244,17 +244,17 @@ async function editItem(id){
   const m=prompt("Min Stock:",i.min_stock);if(m===null)return;
   const c=prompt("Category:",i.category||"");if(c===null)return;
   const j=await postJson("/items/update",{actor:me.username,id,name:n,stock:Number(q),min_stock:Number(m),category:c});
-  if(j.success){toast("✅","success");loadItems();fillItemSelect();loadDashKpi();}
+  if(j.success){toast("\u2705","success");loadItems();fillItemSelect();loadDashKpi();}
   else toast(j.message,"error");
 }
 
-async function deleteItem(id){if(!confirm("ลบ?"))return;const j=await postJson("/items/delete",{actor:me.username,id});if(j.success){toast("Deleted","success");loadItems()}else toast(j.message,"error")}
+async function deleteItem(id){if(!confirm("\u0e25\u0e1a?"))return;const j=await postJson("/items/delete",{actor:me.username,id});if(j.success){toast("Deleted","success");loadItems()}else toast(j.message,"error")}
 
 // ===== REQUEST =====
 function onTypeChange(){
   const t=document.getElementById("reqType").value;
   document.getElementById("borrowDaysBox").style.display=t==="BORROW"?"block":"none";
-  // เพื่อ UX ที่ชัดเจน: เบิก/ยืม ต้องเลือกจากคลัง, ขอซื้อค่อยพิมพ์รายการเอง
+  // \u0e40\u0e1e\u0e37\u0e48\u0e2d UX \u0e17\u0e35\u0e48\u0e0a\u0e31\u0e14\u0e40\u0e08\u0e19: \u0e40\u0e1a\u0e34\u0e01/\u0e22\u0e37\u0e21 \u0e15\u0e49\u0e2d\u0e07\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e08\u0e32\u0e01\u0e04\u0e25\u0e31\u0e07, \u0e02\u0e2d\u0e0b\u0e37\u0e49\u0e2d\u0e04\u0e48\u0e2d\u0e22\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e23\u0e32\u0e22\u0e01\u0e32\u0e23\u0e40\u0e2d\u0e07
   const cn=document.getElementById("customNameBox");
   if(cn) cn.style.display=(t==="PURCHASE")?"block":"none";
 }
@@ -276,19 +276,19 @@ async function createReq(){
 
   if(type==="PURCHASE"){
     if(!itemName) itemName=custom;
-    if(!itemName){document.getElementById("reqMsg").innerHTML='<span style="color:#dc2626">❌ เลือกหรือกรอกชื่อรายการ</span>';return}
+    if(!itemName){document.getElementById("reqMsg").innerHTML='<span style="color:#dc2626">\u274c \u0e40\u0e25\u0e37\u0e2d\u0e01\u0e2b\u0e23\u0e37\u0e2d\u0e01\u0e23\u0e2d\u0e01\u0e0a\u0e37\u0e48\u0e2d\u0e23\u0e32\u0e22\u0e01\u0e32\u0e23</span>';return}
   }else{
-    // WITHDRAW / BORROW ต้องเลือกจากคลัง (backend ตรวจ stock)
-    if(!itemName){document.getElementById("reqMsg").innerHTML='<span style="color:#dc2626">❌ เบิก/ยืม ต้องเลือกจากคลัง</span>';return}
+    // WITHDRAW / BORROW \u0e15\u0e49\u0e2d\u0e07\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e08\u0e32\u0e01\u0e04\u0e25\u0e31\u0e07 (backend \u0e15\u0e23\u0e27\u0e08 stock)
+    if(!itemName){document.getElementById("reqMsg").innerHTML='<span style="color:#dc2626">\u274c \u0e40\u0e1a\u0e34\u0e01/\u0e22\u0e37\u0e21 \u0e15\u0e49\u0e2d\u0e07\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e08\u0e32\u0e01\u0e04\u0e25\u0e31\u0e07</span>';return}
   }
 
   if(!me||!me.username||!me.department){
-    document.getElementById("reqMsg").innerHTML='<span style="color:#dc2626">❌ กรุณา Login ใหม่</span>';return;
+    document.getElementById("reqMsg").innerHTML='<span style="color:#dc2626">\u274c \u0e01\u0e23\u0e38\u0e13\u0e32 Login \u0e43\u0e2b\u0e21\u0e48</span>';return;
   }
 
   let finalReason=reason;
   if(type==="BORROW"){
-    finalReason=(finalReason?finalReason+"\n":"")+`(ระยะยืม ${days} วัน)`;
+    finalReason=(finalReason?finalReason+"\n":"")+`(\u0e23\u0e30\u0e22\u0e30\u0e22\u0e37\u0e21 ${days} \u0e27\u0e31\u0e19)`;
   }
 
   const body={
@@ -304,14 +304,14 @@ async function createReq(){
   document.getElementById("reqMsg").innerHTML='<span style="color:var(--p)"><i class="fa-solid fa-spinner fa-spin"></i></span>';
   const j=await postJson("/request",body);
   if(j.success){
-    toast(`✅ #${j.id||""} — แจ้ง Chat แล้ว!`,"success");
+    toast(`\u2705 #${j.id||""} \u2014 \u0e41\u0e08\u0e49\u0e07 Chat \u0e41\u0e25\u0e49\u0e27!`,"success");
     ["reqCustom","reqReason","reqLink"].forEach(id=>{const e=document.getElementById(id);if(e)e.value=""});
     document.getElementById("reqItem").value="";
     document.getElementById("reqQty").value="1";
-    document.getElementById("reqMsg").innerHTML='<span style="color:#059669">✅</span>';
+    document.getElementById("reqMsg").innerHTML='<span style="color:#059669">\u2705</span>';
     setTimeout(()=>go("mine"),700);
   }else{
-    document.getElementById("reqMsg").innerHTML=`<span style="color:#dc2626">❌ ${esc(j.message||j.error||"Error")}</span>`;
+    document.getElementById("reqMsg").innerHTML=`<span style="color:#dc2626">\u274c ${esc(j.message||j.error||"Error")}</span>`;
   }
 }
 
@@ -319,16 +319,16 @@ async function createReq(){
 // ===== MY REQUESTS =====
 async function loadMy(){const j=await getJson("/requests",{actor:me.username,scope:"mine"});const rows=j.rows||j.requests||[];
   document.getElementById("myEmpty").style.display=rows.length?"none":"block";
-  document.getElementById("myBody").innerHTML=rows.map(r=>`<tr><td style="padding-left:16px;font-weight:600;color:var(--p)">#${r.id}</td><td>${typeBadge(r.req_type)}</td><td style="font-weight:500">${esc(r.item_name)}</td><td>${r.quantity}</td><td>${badge(r.status)}</td><td class="muted" style="font-size:12px">${(r.created_at||"").slice(0,10)}</td><td>${r.status==="PENDING"?`<button class="btn sm danger" onclick="cancelReq(${r.id})"><i class="fa-solid fa-xmark"></i> ยกเลิก</button>`:""}</td></tr>`).join("")}
-async function cancelReq(id){if(!confirm("ยกเลิก #"+id+"?"))return;const j=await postJson(`/requests/${id}/cancel`,{actor:me.username});if(j.success){toast("Cancelled","success");loadMy()}else toast(j.message,"error")}
+  document.getElementById("myBody").innerHTML=rows.map(r=>`<tr><td style="padding-left:16px;font-weight:600;color:var(--p)">#${r.id}</td><td>${typeBadge(r.req_type)}</td><td style="font-weight:500">${esc(r.item_name)}</td><td>${r.quantity}</td><td>${badge(r.status)}</td><td class="muted" style="font-size:12px">${(r.created_at||"").slice(0,10)}</td><td>${r.status==="PENDING"?`<button class="btn sm danger" onclick="cancelReq(${r.id})"><i class="fa-solid fa-xmark"></i> \u0e22\u0e01\u0e40\u0e25\u0e34\u0e01</button>`:""}</td></tr>`).join("")}
+async function cancelReq(id){if(!confirm("\u0e22\u0e01\u0e40\u0e25\u0e34\u0e01 #"+id+"?"))return;const j=await postJson(`/requests/${id}/cancel`,{actor:me.username});if(j.success){toast("Cancelled","success");loadMy()}else toast(j.message,"error")}
 
 // ===== INBOX =====
 async function loadInbox(){const j=await getJson("/requests",{actor:me.username,scope:"inbox"});const rows=j.rows||j.requests||[];
   document.getElementById("inboxEmpty").style.display=rows.length?"none":"block";
   if(rows.length){document.getElementById("inboxCt").style.display="inline";document.getElementById("inboxCt").textContent=rows.length}else document.getElementById("inboxCt").style.display="none";
   document.getElementById("inboxBody").innerHTML=rows.map(r=>`<tr><td style="padding-left:16px;font-weight:600;color:var(--p)">#${r.id}</td><td>${typeBadge(r.req_type)}</td><td style="font-weight:500">${esc(r.item_name)}</td><td>${r.quantity}</td><td style="font-size:12px">${esc(r.requester||"")}</td><td style="font-size:12px">${esc(r.department||"")}</td><td>${badge(r.status)}</td><td style="display:flex;gap:6px"><button class="btn sm ok" onclick="approveReq(${r.id})"><i class="fa-solid fa-check"></i></button><button class="btn sm danger" onclick="rejectReq(${r.id})"><i class="fa-solid fa-xmark"></i></button></td></tr>`).join("")}
-async function approveReq(id){const j=await postJson(`/requests/${id}/approve`,{actor:me.username});if(j.success){toast("✅ Approved — แจ้ง Chat แล้ว!","success");loadInbox();loadMy()}else toast(j.message,"error")}
-async function rejectReq(id){const reason=prompt("เหตุผลที่ปฏิเสธ:");if(reason===null)return;const j=await postJson(`/requests/${id}/reject`,{actor:me.username,reason:reason||"-"});if(j.success){toast("❌ Rejected — แจ้ง Chat แล้ว!","success");loadInbox()}else toast(j.message,"error")}
+async function approveReq(id){const j=await postJson(`/requests/${id}/approve`,{actor:me.username});if(j.success){toast("\u2705 Approved \u2014 \u0e41\u0e08\u0e49\u0e07 Chat \u0e41\u0e25\u0e49\u0e27!","success");loadInbox();loadMy()}else toast(j.message,"error")}
+async function rejectReq(id){const reason=prompt("\u0e40\u0e2b\u0e15\u0e38\u0e1c\u0e25\u0e17\u0e35\u0e48\u0e1b\u0e0f\u0e34\u0e40\u0e2a\u0e18:");if(reason===null)return;const j=await postJson(`/requests/${id}/reject`,{actor:me.username,reason:reason||"-"});if(j.success){toast("\u274c Rejected \u2014 \u0e41\u0e08\u0e49\u0e07 Chat \u0e41\u0e25\u0e49\u0e27!","success");loadInbox()}else toast(j.message,"error")}
 
 // ===== BORROW =====
 async function loadBorrows(){
@@ -343,14 +343,14 @@ async function loadBorrows(){
       <td>${b.quantity||1}</td>
       <td class="muted" style="font-size:12px">${(b.borrowed_at||"").slice(0,10)}</td>
       <td class="muted" style="font-size:12px">${due}</td>
-      <td>${b.returned_at?'<span class="badge green">คืนแล้ว</span>':'<span class="badge amber">ยืมอยู่</span>'}</td>
-      <td>${!b.returned_at&&(me.role==="IT"||me.username===b.borrower)?`<button class="btn sm ok" onclick="returnBorrow(${b.id})"><i class="fa-solid fa-undo"></i> คืน</button>`:""}</td>
+      <td>${b.returned_at?'<span class="badge green">\u0e04\u0e37\u0e19\u0e41\u0e25\u0e49\u0e27</span>':'<span class="badge amber">\u0e22\u0e37\u0e21\u0e2d\u0e22\u0e39\u0e48</span>'}</td>
+      <td>${!b.returned_at&&(me.role==="IT"||me.username===b.borrower)?`<button class="btn sm ok" onclick="returnBorrow(${b.id})"><i class="fa-solid fa-undo"></i> \u0e04\u0e37\u0e19</button>`:""}</td>
     </tr>`;
   }).join("");
 }
 async function returnBorrow(id){
   const j=await postJson(`/borrow_records/${id}/return`,{actor:me.username});
-  if(j.success){toast("✅ คืนแล้ว","success");loadBorrows();loadItems();loadDashKpi();}
+  if(j.success){toast("\u2705 \u0e04\u0e37\u0e19\u0e41\u0e25\u0e49\u0e27","success");loadBorrows();loadItems();loadDashKpi();}
   else toast(j.message,"error");
 }
 
@@ -391,9 +391,9 @@ async function loadUsers(){
 }
 
 
-function showAddUser(){const u=prompt("Username:");if(!u)return;const p=prompt("Password:");if(!p)return;const n=prompt("Name:");const d=prompt("Department:");const r=prompt("Role (USER/HEAD/IT/FINANCE/CEO):","USER");const e=prompt("Email:");postJson("/users/add",{actor:me.username,username:u,password:p,name:n||u,department:d||"",role:r||"USER",email:e||"",approved:1}).then(j=>{if(j.success){toast("✅","success");loadUsers()}else toast(j.message,"error")})}
+function showAddUser(){const u=prompt("Username:");if(!u)return;const p=prompt("Password:");if(!p)return;const n=prompt("Name:");const d=prompt("Department:");const r=prompt("Role (USER/HEAD/IT/FINANCE/CEO):","USER");const e=prompt("Email:");postJson("/users/add",{actor:me.username,username:u,password:p,name:n||u,department:d||"",role:r||"USER",email:e||"",approved:1}).then(j=>{if(j.success){toast("\u2705","success");loadUsers()}else toast(j.message,"error")})}
 function showImportUsers(){const csv=prompt("Paste CSV (username,password,name,department,role,email per line):");if(!csv)return;postJson("/users/import_csv",{actor:me.username,csv}).then(j=>{if(j.success){toast(`Created: ${j.created}, Skipped: ${j.skipped}`,"success");loadUsers()}else toast(j.message,"error")})}
-async function updateUser(target,role,approved,department,locked){const j=await postJson("/users/update",{actor:me.username,target,role,approved,department,locked});if(j.success){toast("✅","success");loadUsers()}else toast(j.message,"error")}
+async function updateUser(target,role,approved,department,locked){const j=await postJson("/users/update",{actor:me.username,target,role,approved,department,locked});if(j.success){toast("\u2705","success");loadUsers()}else toast(j.message,"error")}
 async function deleteUser(target){if(!confirm("Delete "+target+"?"))return;const j=await postJson("/users/soft_delete",{actor:me.username,target});if(j.success){toast("Deleted","success");loadUsers()}else toast(j.message,"error")}
 async function restoreUser(target){const j=await postJson("/users/restore",{actor:me.username,target});if(j.success){toast("Restored","success");loadUsers()}else toast(j.message,"error")}
 async function resetUserPw(target){const j=await postJson("/users/reset_password",{actor:me.username,target});if(j.success)alert("Temp PW: "+(j.temp_password||j.password||"check logs"));else toast(j.message,"error")}
@@ -435,9 +435,9 @@ async function setQuota(){
   const withdraw_limit=Number(document.getElementById("qWithdraw").value||0);
   const borrow_limit=Number(document.getElementById("qBorrow").value||0);
   const purchase_limit=Number(document.getElementById("qPurchase").value||0);
-  if(!dept){toast("ใส่ Department","error");return}
+  if(!dept){toast("\u0e43\u0e2a\u0e48 Department","error");return}
   const j=await postJson("/quotas/set",{actor:me.username,department:dept,withdraw_limit,borrow_limit,purchase_limit});
-  if(j.success){toast("✅","success");loadQuotas()}else toast(j.message,"error");
+  if(j.success){toast("\u2705","success");loadQuotas()}else toast(j.message,"error");
 }
 
 

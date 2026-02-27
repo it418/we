@@ -213,13 +213,17 @@ const uniUpload = multer({
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use("/it", express.static(path.join(__dirname, "it", "public"), {
   etag: false,
-  setHeaders: (res, fp) => { if (String(fp).endsWith(".html")) res.setHeader("Cache-Control", "no-store"); }
+  setHeaders: (res, fp) => {
+    if (String(fp).endsWith(".html")) res.setHeader("Cache-Control", "no-store");
+    if (String(fp).endsWith(".js"))   res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+  }
 }));
 // Universe UI: disable caching for HTML so deployments update immediately (prevents stale login JS)
 app.use("/universe", express.static(path.join(__dirname, "universe", "public"), {
   etag: false,
   setHeaders: (res, fp) => {
-    if (String(fp).endsWith(".html")) res.setHeader("Cache-Control", "no-store");
+    if (String(fp).endsWith(".html") || String(fp).endsWith(".js")) res.setHeader("Cache-Control", "no-store");
+    if (String(fp).endsWith(".js")) res.setHeader("Content-Type", "application/javascript; charset=utf-8");
   }
 }));
 
